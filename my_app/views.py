@@ -3,6 +3,8 @@ from my_app.models import hello
 from my_app import models
 from my_app import *
 
+global session
+
 @app.route("/")
 def hello(): 
     return models.hello()
@@ -24,10 +26,10 @@ def login():
     elif request.method=="POST":
         username = request.form["email"]
         password = request.form["password"]
-        message = models.login(username, password)
+        message, session = models.login(username, password)
         if message=="success":
-            return  message
-            #return redirect(url_for("data"))
+            #return  message
+            return redirect(url_for("data"))
             #return redirect(url_for("visual"))
         elif message=="incorrect":
             return "incorrect credentials"
@@ -40,14 +42,23 @@ def visual():
         return "please loggin again"
     else:
         script, div =  models.home()
-        return render_template("home.html",the_script=script, the_div=div)
+        return render_template("viz.html",the_script=script, the_div=div)
 
-@app.route("/data/<param>", methods=["GET","POST"])
+@app.route("/data", methods=["GET","POST"])
 @cache.memoize(20)
-def data(param):
-    dataset = fetch_data.data()
-    return jsonify(dataset[0:int(param)])
+def data():
+    try:
+        if session['username']:
+            all_ingredients = ["romaine lettuce", "black olives", "grape tomatoes", "garlic", "pepper"]
+            if request.method == "GET":
+                return render_template('home_page.html', all_ingredients = all_ingredients)
+            elif request.method == "POST":
+                dataset = fetch_data.data()
+                return jsonify(dataset[0:int(5)])
+    except:
+        return "you are logged out"   
 
 @app.route("/logout", methods=["GET","POST"])
 def logout():
+    cache.clear()
     return models.logout()

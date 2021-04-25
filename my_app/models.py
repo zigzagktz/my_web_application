@@ -57,7 +57,7 @@ def login(email, password):
             msg =  "incorrect" 
     else: 
         msg = "missing"
-    return msg
+    return msg, session
 
 def home():
     plot = figure(plot_height=300, plot_width=400)
@@ -78,6 +78,7 @@ def logout():
     session.pop("loggedin",None)
     session.pop("id",None)
     session.pop("username",None)
+    
     msg = "logged out"
     return msg
 
