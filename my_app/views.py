@@ -1,7 +1,8 @@
-from my_app import app
-from my_app.models import hello
 from my_app import models
+from my_app import fetch_data
 from my_app import *
+import sklearn
+import logging
 
 global session
 
@@ -45,20 +46,31 @@ def visual():
         return render_template("viz.html",the_script=script, the_div=div)
 
 @app.route("/data", methods=["GET","POST"])
-@cache.memoize(20)
 def data():
+    all_ingredients = fetch_data.ingredients()
+    #all_ingredients = ["tomatoes", "potatoes", "chilli", "cheeze"]
     try:
         if session['username']:
-            all_ingredients = ["romaine lettuce", "black olives", "grape tomatoes", "garlic", "pepper"]
             if request.method == "GET":
                 return render_template('home_page.html', all_ingredients = all_ingredients)
             elif request.method == "POST":
-                dataset = fetch_data.data()
-                return jsonify(dataset[0:int(5)])
+                lst = []
+                selected_ingredients = request.form.getlist('skills')
+                lst.append(' '.join(selected_ingredients))
+                result = fetch_data.ml_model_function(lst)[0]
+                return render_template('/result.html',result=str(result))
+                #result = fetch_data.ml_model(lst)
+                #return jsonify(result)
+                #return str(fetch_data.ml_model_function(lst))
+                #dataset = fetch_data.data()
+                #return jsonify(empty_list)
+                #return jsonify(dataset[0:int(5)])
     except:
+        app.logger.error('error message')
         return "you are logged out"   
 
 @app.route("/logout", methods=["GET","POST"])
 def logout():
     cache.clear()
     return models.logout()
+

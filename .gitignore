@@ -130,3 +130,7 @@ dmypy.json
 
 # database
 students.db
+
+# pickle files
+ingredients.pkl
+ml_model.pkl
