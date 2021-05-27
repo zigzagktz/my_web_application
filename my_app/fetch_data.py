@@ -43,6 +43,6 @@ def ingredients():
 
 @cache.memoize(20)
 def ml_model_function(lst):
-    return ml_model.predict(['cooking oil green chilies grilled'])
+    return ml_model.predict(lst)
 
 #print(ml_model.predict(['cooking oil green chilies grilled']))

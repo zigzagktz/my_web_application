@@ -17,7 +17,7 @@ def register():
     elif request.method=="POST":
         username, password, email = request.form["username"], request.form["password"], request.form["email"]
         message = models.register(username,password,email)
-        return render_template("/home.html",msg=message)
+        return message
 
 
 @app.route("/login", methods=["GET","POST"])
