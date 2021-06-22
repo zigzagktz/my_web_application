@@ -7,13 +7,15 @@ import pickle
 import sklearn
 from my_app import *
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/siroh/Desktop/Entrada/python/learning/zkey/my_project.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/siroh/Desktop/Entrada/python/learning/zkey/my_project.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="my_project.json"
+
 
 storage_client = storage.Client()
-bucket = storage_client.get_bucket("kshitiz_application")
-obj1 = bucket.get_blob("recipe_training_dataset.json") 
-obj2 = bucket.get_blob("cuisine_prediction.pkl") 
-obj3 = bucket.get_blob("ingredients_list.pkl") 
+bucket = storage_client.get_bucket("ksirohi")
+obj1 = bucket.get_blob("train.json") 
+obj2 = bucket.get_blob("ml_model.pkl") 
+obj3 = bucket.get_blob("ingredients.pkl") 
 
 dataset = json.loads(obj1.download_as_text())
 

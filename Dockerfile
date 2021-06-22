@@ -7,4 +7,5 @@ COPY . .
 RUN apt-get -y update
 RUN pip3 install -r requirements.txt
 
-CMD ["python","./app/run.py"]
+#CMD ["python","run.py"]
+CMD ["gunicorn","--bind","0.0.0.0:5000","run:app"]

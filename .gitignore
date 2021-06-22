@@ -134,3 +134,6 @@ students.db
 # pickle files
 ingredients.pkl
 ml_model.pkl
+
+#key
+my_project.json
